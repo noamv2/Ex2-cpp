@@ -14,7 +14,7 @@ bool Notebook::isIn(int key){
     return notebook.count(key) != 0;
 }
 
-void Notebook::write(int page, int row, int col, Direction dir, string str){
+void Notebook::write(int page, int row, int col, Direction dir, string const & str){
     if(page < 0 || row < 0 || col < 0){
         throw "Invalid input";
     }
@@ -58,12 +58,12 @@ void Notebook::show(int page){
 void Page::newLines(int num){
 
     for(int i = 0 ; i < num ; i ++){
-        vector<char> v (100,'_');
+        vector<char> v (ROW_END,'_');
         rows.push_back(v);
     }
 }
 
-void Page::writeRange(int row,int col,Direction dir, int len, std::string data){
+void Page::writeRange(int row,int col,Direction dir, int len, std::string const & data){
     
     if(len < 0 || row < 0 || col < 0){
         throw "Invalid input";
@@ -75,7 +75,7 @@ void Page::writeRange(int row,int col,Direction dir, int len, std::string data){
         currLen--; //in case where the page is empty
     }
 
-    int linesToAdd;
+    int linesToAdd = 0;
     
     if(dir == Direction::Vertical){
         
@@ -101,11 +101,11 @@ void Page::writeRange(int row,int col,Direction dir, int len, std::string data){
     else{
 
         //throw an exception if we are out of the row
-        if(len + col > 100){
+        if(len + col > ROW_END){
             throw "Out of row error";
         }
         //Add new rows if needed
-        int neededRows = (col + len -1) / 100;
+        int neededRows = (col + len -1) / ROW_END;
         linesToAdd =(neededRows - (currLen - row));
         if(linesToAdd > 0){
             newLines(linesToAdd);
@@ -114,12 +114,12 @@ void Page::writeRange(int row,int col,Direction dir, int len, std::string data){
         //make sure that we are writing to empty cells
         for(int i = col; i < col + len;i++){
             
-            if(rows.at(static_cast<size_t>(rowTemp)).at(static_cast<size_t>(i % 100)) != '_'){
+            if(rows.at(static_cast<size_t>(rowTemp)).at(static_cast<size_t>(i % ROW_END)) != '_'){
                 return;
             }
-            rowTemp = row + i /100;
+            rowTemp = row + i /ROW_END;
         }
-        rowTemp = row;
+        
         //write the actual data
         
         for(char c: data){
@@ -127,7 +127,7 @@ void Page::writeRange(int row,int col,Direction dir, int len, std::string data){
             rows.at(static_cast<size_t>(row)).at(static_cast<size_t>(col)) = c;
             ++col;
 
-            if(col == 100){
+            if(col == ROW_END){
                 col = 0;
                 ++row;
             }
@@ -139,7 +139,7 @@ void Page::writeRange(int row,int col,Direction dir, int len, std::string data){
 }
 
 std::string Page::readPage(){
-    std::string s = "";
+    std::string s;
     
     for(size_t i = 0 ; i < rows.size(); i++){
 
@@ -164,7 +164,7 @@ void Page::eraseData(int row,int col,Direction dir, int len){
     if(currLen == 0){
         currLen--; //in case where the page is empty
     }
-    int linesToAdd;
+    int linesToAdd = 0;
 
     if(dir == Direction::Vertical){
         
@@ -182,11 +182,11 @@ void Page::eraseData(int row,int col,Direction dir, int len){
     }
 
     else{
-        if(len + col > 100){
+        if(len + col > ROW_END){
             throw "Out of row error";
         }
         //Add new rows if needed
-        int neededRows = (col + len -1) / 100;
+        int neededRows = (col + len -1) / ROW_END;
         linesToAdd =(neededRows - (currLen - row));
         if(linesToAdd > 0){
             newLines(linesToAdd);
@@ -195,9 +195,9 @@ void Page::eraseData(int row,int col,Direction dir, int len){
         //make sure that we are writing to empty cells
         for(int i = col; i < col + len;i++){
             
-            rows.at(static_cast<size_t>(rowTemp)).at(static_cast<size_t>(i % 100)) = '~';
+            rows.at(static_cast<size_t>(rowTemp)).at(static_cast<size_t>(i % ROW_END)) = '~';
 
-            rowTemp = row + i /100;
+            rowTemp = row + i /ROW_END;
         }
 
 
@@ -229,7 +229,7 @@ std::string Page::readRange(int row, int col, Direction dir, int len){
 
 
     else{
-        if(len + col > 100){
+        if(len + col > ROW_END){
             throw "Out of row error";
         }
     
@@ -238,7 +238,7 @@ std::string Page::readRange(int row, int col, Direction dir, int len){
             res.replace(static_cast<size_t>(index),1,1,rows.at(static_cast<size_t>(row)).at(static_cast<size_t>(col)));
             col++;
             index++;
-            if(col == 100){//go the next row if we reached the end of the current one
+            if(col == ROW_END){//go the next row if we reached the end of the current one
                 col = 0;
                 ++row;
             }

@@ -5,6 +5,7 @@
 
 using std::vector;
 
+const int ROW_END = 100;
 
 namespace ariel {
 	class Page{
@@ -14,7 +15,7 @@ namespace ariel {
 	public:
 
 	void newLines(int);
-	void writeRange(int, int, ariel::Direction,int len , std::string);
+	void writeRange(int, int, ariel::Direction,int len , std::string const &);
 	void eraseData(int, int, ariel::Direction, int);
 
 	std::string readRange(int, int,ariel::Direction, int);
@@ -28,7 +29,7 @@ namespace ariel {
 
 		public:
 
-		void write(int page, int row, int col, Direction dir, std::string data);
+		void write(int page, int row, int col, Direction dir, std::string const &  str);
 		std::string read(int page, int row, int col, Direction dir, int len);
 		void erase(int page, int row, int col, Direction dir, int len);
 
