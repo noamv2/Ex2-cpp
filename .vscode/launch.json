@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/noamv/cpp/assignments/a2/Ex2-cpp/demo",
+            "program": "/home/noamv/cpp/assignments/a2/Ex2-cpp/test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
